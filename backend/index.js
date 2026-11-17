@@ -50,8 +50,40 @@ app.get('/math/rectangle/:width/:height', (req, res) => {
   res.json(result);
 });
 
-//TODO3
+// Endpoint for power
+app.get("/math/power/:base?/:exponent?", (req, res) => {
+  const base = req.params.base !== undefined ? parseFloat(req.params.base) : 4;
+  const exponent = req.params.exponent !== undefined ? parseFloat(req.params.exponent) : 2;
 
+  if (isNaN(base) || isNaN(exponent)) {
+    return res.status(400).json({ 
+      error: "Base and exponent must be valid numbers." 
+    });
+  }
+
+  const isRoot = req.query.root === 'true';
+
+  if (isRoot && base < 0) {
+    return res.status(400).json({ 
+      error: "Base cannot be negative with root=true." 
+    });
+  }
+
+  const power = Math.pow(base, exponent);
+
+  if (isRoot) {
+    const root = Math.sqrt(base);
+    res.json({
+      result: power,
+      root: root
+    });
+  } 
+  else {
+    res.json({
+      result: power
+    });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
