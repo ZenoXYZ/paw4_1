@@ -3,9 +3,23 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 // define endpoint for exercise 1 here
 app.get('/math/circle/:r', (req, res) => {
-//TODO1  
+  const radius = parseFloat(req.params.r);
+  
+  if (isNaN(radius)) {
+    return res.status(400).json({ error: 'Radius must be a valid number' });
+  }
+
+  const area = parseFloat(Math.PI * radius * radius).toFixed(2);
+  const circumference = parseFloat(2 * Math.PI * radius).toFixed(2);
+
+  const result = {
+    area: area,
+    circumference: circumference
+  };
   res.json(result);
 });
 
